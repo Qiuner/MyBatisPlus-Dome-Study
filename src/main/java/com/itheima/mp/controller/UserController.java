@@ -3,12 +3,14 @@ package com.itheima.mp.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.itheima.mp.domain.dto.UserFormDTO;
 import com.itheima.mp.domain.po.User;
+import com.itheima.mp.domain.query.UserQuery;
 import com.itheima.mp.domain.vo.UserVO;
 import com.itheima.mp.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,5 +62,16 @@ public class UserController {
          @ApiParam("用户id") @PathVariable("id") Long userId,
          @ApiParam("扣减的金额")   @PathVariable("money") Integer money){
         userService.deductBalance(userId, money);
+    }
+
+    @GetMapping("/list")
+    @ApiOperation("根据id集合查询用户")
+    public List<UserVO> queryUsers(UserQuery query){
+        //查询用户po
+        List<User> users = userService.queryUsers(
+                query.getName(),query.getStatus(),
+                query.getMinBalance(),query.getMaxBalance());
+        //处理vo
+        return BeanUtil.copyToList(users, UserVO.class);
     }
 }
