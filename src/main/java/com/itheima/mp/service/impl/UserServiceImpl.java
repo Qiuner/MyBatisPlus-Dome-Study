@@ -27,10 +27,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (user.getBalance() < money) {
             throw new RuntimeException("用户余额不足") ;
         }
-        // 扣减余额
-        baseMapper.deductBalance(userId, money);
-        // 更新用户
-        updateById(user);
+        // 4.扣减余额 update tb_user set balance = balance - ?
+        int remainBalance = user.getBalance() - money;
+        lambdaUpdate()
+                .set(User::getBalance, remainBalance) // 更新余额
+                .set(remainBalance == 0, User::getStatus, 2) // 动态判断，是否更新status
+                .eq(User::getId, userId)
+                // 存在线程安全问题
+                .eq(User::getBalance, user.getBalance()) // 乐观锁
+                .update();
     }
 
     @Override
