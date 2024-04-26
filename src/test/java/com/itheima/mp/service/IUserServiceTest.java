@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,6 +25,24 @@ class IUserServiceTest {
         System.out.println("耗时：" + (e - b));
     }
 
+    // 下面这种数据能够提升10倍
+
+    @Test
+    void testSaveBatch() {
+        // 准备10万条数据
+        List<User> list = new ArrayList<>(1000);
+        long b = System.currentTimeMillis();
+        for (int i = 1; i <= 100000; i++) {
+            list.add(buildUser(i));
+            // 每1000条批量插入一次
+            if (i % 1000 == 0) {
+                userService.saveBatch(list);
+                list.clear();
+            }
+        }
+        long e = System.currentTimeMillis();
+        System.out.println("耗时：" + (e - b));
+    }
     private User buildUser(int i) {
         User user = new User();
         user.setUsername("user_" + i);
