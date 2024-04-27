@@ -1,9 +1,12 @@
 package com.itheima.mp.domain.dto;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.itheima.mp.domain.vo.AddressVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @ApiModel(description = "用户表单实体")
@@ -26,4 +29,5 @@ public class UserFormDTO {
 
     @ApiModelProperty("账户余额")
     private Integer balance;
+
 }

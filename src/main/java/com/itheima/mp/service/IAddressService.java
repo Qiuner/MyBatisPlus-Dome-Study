@@ -12,5 +12,4 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2024-04-26
  */
 public interface IAddressService extends IService<Address> {
-
 }

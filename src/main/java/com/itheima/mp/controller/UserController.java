@@ -42,18 +42,15 @@ public class UserController {
     @ApiOperation("根据id查询用户")
     public UserVO queryUserById(@PathVariable("id") Long userId){
         // 1.查询用户
-        User user = userService.getById(userId);
-        // 2.处理vo
-        return BeanUtil.copyProperties(user, UserVO.class);
+        return userService.queryUserAndAddressById(userId);
     }
 
     @GetMapping
     @ApiOperation("根据id集合查询用户")
-    public List<UserVO> queryUserByIds(@RequestParam("ids") List<Long> ids){
+    public List<UserVO> queryUserByIds(@RequestParam("ids") List<Long> ids) {
         // 1.查询用户
-        List<User> users = userService.listByIds(ids);
-        // 2.处理vo
-        return BeanUtil.copyToList(users, UserVO.class);
+        return userService.queryUserAndAddressByIds(ids);
+
     }
 
     @ApiOperation("扣减用户余额接口")
@@ -65,7 +62,7 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    @ApiOperation("根据id集合查询用户")
+    @ApiOperation("根据对象查询用户")
     public List<UserVO> queryUsers(UserQuery query){
         //查询用户po
         List<User> users = userService.queryUsers(
